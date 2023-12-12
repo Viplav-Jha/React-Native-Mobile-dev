@@ -5,7 +5,6 @@ type DayListItem ={
 };
 
 export default function DayListItem({day}:DayListItem) {
-    console.log();
     return (
         <View style={styles.box}>
             <Text style={styles.text}>{day}</Text>
@@ -30,7 +29,8 @@ const styles = StyleSheet.create({
     },
     text:{
       color:'#9b4521',
-      fontSize:70
+      fontSize:70,
+      fontFamily:'Inter'
     }
   });
   
