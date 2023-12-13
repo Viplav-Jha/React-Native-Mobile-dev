@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { Text, View, StyleSheet,SafeAreaView } from "react-native";
+import { Text, View, StyleSheet,SafeAreaView, Pressable } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 export default function OnboardingScreen() {
@@ -19,6 +19,12 @@ export default function OnboardingScreen() {
           Monitor your spending and contribution, ensuring everty pennty align
           with your family's aspirations
         </Text>
+        <View style={styles.buttonsRow}>
+        <Text style={styles.buttonText}>Skip</Text>
+            <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>Continue</Text>
+            </Pressable>
+        </View>
       </View>
       </View>
      
@@ -46,7 +52,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "InterBlack",
     letterSpacing: 1.3,
-    marginVertical:20
+    marginVertical:10
   },
   description: {
     color: "gray",
@@ -56,5 +62,24 @@ const styles = StyleSheet.create({
   },
   footer: {
     marginTop: "auto",
+  },
+  buttonsRow:{
+    marginTop:20,
+    flexDirection:'row',
+    alignItems:"center",
+    gap:20
+  },
+  button:{
+    backgroundColor:'#302E38',
+    padding:15,
+    borderRadius:50,
+    alignItems:'center',
+    flex:1,
+  },
+  buttonText:{
+    color:'#FDFDFD',
+    fontFamily:'InterSemi',
+    fontSize:16,
+    paddingHorizontal:25
   },
 });
