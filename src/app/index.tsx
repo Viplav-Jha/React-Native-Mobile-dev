@@ -1,46 +1,28 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, FlatList, ActivityIndicator } from "react-native";
-
-import * as SplashScreen from 'expo-splash-screen';
-import {useFonts, Inter_900Black } from "@expo-google-fonts/inter";
-import { useEffect } from "react";
-import {AmaticSC_400Regular,AmaticSC_700Bold} from '@expo-google-fonts/amatic-sc'
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+} from "react-native";
 import DayListItem from "./components/core/DayListItem";
 
-SplashScreen.preventAutoHideAsync()
+
 
 const days = [...Array(24)].map((val, Index) => Index + 1);
+
 export default function HomeScreen() {
  
-  const[fontsLoaded,fontError] =useFonts({
-    Inter:Inter_900Black,
-    Amatic: AmaticSC_400Regular,
-    AmaticBold:AmaticSC_700Bold
-  });
-
- 
-
-  useEffect(()=>{
-    if(fontsLoaded || fontError){
-      SplashScreen.hideAsync();
-   }
-  },[fontsLoaded,fontError])
-
-  if(!fontsLoaded && !fontError){
-    return null;
- }
-
   return (
     <View style={styles.container}>
-      <DayListItem day={0}/>
-    
+      <DayListItem day={0} />
 
       <FlatList
         data={days}
         contentContainerStyle={styles.content}
         columnWrapperStyle={styles.column}
         numColumns={2}
-        renderItem={({ item }) => <DayListItem day ={item}/>}
+        renderItem={({ item }) => <DayListItem day={item} />}
       />
       {/*       
       {days.map((day)=>(
@@ -65,5 +47,4 @@ const styles = StyleSheet.create({
   column: {
     gap: 10,
   },
-
 });

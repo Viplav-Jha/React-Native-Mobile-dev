@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const DayDeatilsScreen = () => {
+const DayDeatilsScreen2 = () => {
   return (
     <View>
       <Text>DayDeatilsScreen</Text>
@@ -9,4 +9,4 @@ const DayDeatilsScreen = () => {
   )
 }
 
-export default DayDeatilsScreen
+export default DayDeatilsScreen2;
