@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
+import { useFonts, Inter_900Black ,Inter_600SemiBold,Inter_400Regular,Inter_700Bold} from "@expo-google-fonts/inter";
 import { useEffect } from "react";
 import {
   AmaticSC_400Regular,
@@ -11,7 +11,9 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
-    Inter: Inter_900Black,
+    Inter: Inter_400Regular,
+    InterSemi:Inter_600SemiBold,
+    InterBold:Inter_700Bold,
     Amatic: AmaticSC_400Regular,
     AmaticBold: AmaticSC_700Bold,
   });
