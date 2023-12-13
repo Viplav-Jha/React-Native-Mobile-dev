@@ -14,6 +14,7 @@ export default function RootLayout() {
     Inter: Inter_400Regular,
     InterSemi:Inter_600SemiBold,
     InterBold:Inter_700Bold,
+    InterBlack:Inter_900Black,
     Amatic: AmaticSC_400Regular,
     AmaticBold: AmaticSC_700Bold,
   });
