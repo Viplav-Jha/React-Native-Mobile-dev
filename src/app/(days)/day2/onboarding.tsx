@@ -1,8 +1,10 @@
 import { Link, Stack, router } from "expo-router";
 import { Text, View, StyleSheet, SafeAreaView, Pressable } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { useState } from "react";
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import { GestureDetector,Gesture } from 'react-native-gesture-handler';
+import { Directions } from 'react-native-gesture-handler';
 
 const onboardingSteps = [
   {
@@ -23,7 +25,6 @@ const onboardingSteps = [
     description:
       'Contribute to "Education for Everyone" in the AI World and make a life-changing impact.',
   },
-  
 ];
 
 export default function OnboardingScreen() {
@@ -47,19 +48,32 @@ export default function OnboardingScreen() {
     router.back();
   };
 
+  const fling = Gesture.Fling()
+  .direction(Directions.RIGHT | Directions.LEFT)
+  .onBegin((event)=> {
+    console.log('FLING start', event)
+  })
+  .onEnd((event) =>{
+    console.log("FLING end ",event)
+    onContinue();
+  })
+
   return (
     <SafeAreaView style={styles.page}>
       <Stack.Screen options={{ headerShown: false }} />
-      <StatusBar style ='light' />
+      <StatusBar style="light" />
+      <GestureDetector gesture={fling}>
+        
       <View style={styles.pageContainer}>
         <View style={styles.stepIndicatorcontainer}>
-            {onboardingSteps.map((steps,index)=>(
-               <View style={[styles.stepIndicator ,{backgroundColor: index === screenIndex ? '#CEF202' :'gray'}]}
-                />
-            ))}
-           
-            
-             
+          {onboardingSteps.map((steps, index) => (
+            <View
+              style={[
+                styles.stepIndicator,
+                { backgroundColor: index === screenIndex ? "#CEF202" : "gray" },
+              ]}
+            />
+          ))}
         </View>
         <FontAwesome5
           style={styles.image}
@@ -81,6 +95,9 @@ export default function OnboardingScreen() {
           </View>
         </View>
       </View>
+
+      </GestureDetector>
+     
     </SafeAreaView>
   );
 }
@@ -98,7 +115,7 @@ const styles = StyleSheet.create({
   },
   image: {
     alignSelf: "center",
-    marginTop:10
+    marginTop: 50,
   },
   title: {
     color: "#FDFDFD",
@@ -138,16 +155,15 @@ const styles = StyleSheet.create({
   },
 
   //steps
-  stepIndicatorcontainer:{
-    flexDirection:'row',
-    gap:8,
-    marginHorizontal:3,
-    marginTop:10,
+  stepIndicatorcontainer: {
+    flexDirection: "row",
+    gap: 8,
+    marginHorizontal: 3,
+    marginTop: 10,
   },
-  stepIndicator:{
-    flex:1,
-    height:3,
-    backgroundColor:'gray',
-   
-  }
+  stepIndicator: {
+    flex: 1,
+    height: 3,
+    backgroundColor: "gray",
+  },
 });
