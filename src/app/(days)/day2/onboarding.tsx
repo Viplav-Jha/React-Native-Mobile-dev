@@ -3,8 +3,8 @@ import { Text, View, StyleSheet, SafeAreaView, Pressable } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { GestureDetector,Gesture } from 'react-native-gesture-handler';
-import { Directions } from 'react-native-gesture-handler';
+import { GestureDetector, Gesture } from "react-native-gesture-handler";
+import { Directions } from "react-native-gesture-handler";
 
 const onboardingSteps = [
   {
@@ -14,13 +14,13 @@ const onboardingSteps = [
       "Embark on a journey of React Native discovery guided by AI insights.",
   },
   {
-    icon: "snowflake",
+    icon: "people-arrows",
     title: "Learn and Flourish Together",
     description:
       "Build expertise with 24 React Native projects, fostering collaborative growth.",
   },
   {
-    icon: "snowflake",
+    icon: "book-reader",
     title: "AI-Powered Education for All",
     description:
       'Contribute to "Education for Everyone" in the AI World and make a life-changing impact.',
@@ -36,10 +36,18 @@ export default function OnboardingScreen() {
   const onContinue = () => {
     const isLastScreen = screenIndex === onboardingSteps.length - 1;
     if (isLastScreen) {
-      setScreenIndex(0);
       endOnboarding();
     } else {
       setScreenIndex(screenIndex + 1);
+    }
+  };
+
+  const onBack = () => {
+    const isFirstScreen = screenIndex === 0;
+    if (isFirstScreen) {
+      endOnboarding();
+    } else {
+      setScreenIndex(screenIndex - 1);
     }
   };
 
@@ -48,56 +56,60 @@ export default function OnboardingScreen() {
     router.back();
   };
 
-  const fling = Gesture.Fling()
-  .direction(Directions.RIGHT | Directions.LEFT)
-  .onBegin((event)=> {
-    console.log('FLING start', event)
-  })
-  .onEnd((event) =>{
-    console.log("FLING end ",event)
-    onContinue();
-  })
+  //   const swipeForward = Gesture.Fling()
+  //   .direction(Directions.LEFT)
+  //   .onEnd(onContinue);
+
+  //   const swipeBack = Gesture.Fling()
+  //   .direction(Directions.RIGHT)
+  //   .onEnd( onBack)
+
+  const swipes = Gesture.Simultaneous(
+    Gesture.Fling().direction(Directions.LEFT).onEnd(onContinue),
+
+    Gesture.Fling().direction(Directions.RIGHT).onEnd(onBack)
+  );
 
   return (
     <SafeAreaView style={styles.page}>
       <Stack.Screen options={{ headerShown: false }} />
       <StatusBar style="light" />
-      <GestureDetector gesture={fling}>
-        
-      <View style={styles.pageContainer}>
-        <View style={styles.stepIndicatorcontainer}>
-          {onboardingSteps.map((steps, index) => (
-            <View
-              style={[
-                styles.stepIndicator,
-                { backgroundColor: index === screenIndex ? "#CEF202" : "gray" },
-              ]}
-            />
-          ))}
-        </View>
-        <FontAwesome5
-          style={styles.image}
-          name={data.icon}
-          size={70}
-          color="#CEF202"
-        />
-        <View style={styles.footer}>
-          <Text style={styles.title}>{data.title}</Text>
-          <Text style={styles.description}>{data.description}</Text>
-          <View style={styles.buttonsRow}>
-            <Text onPress={endOnboarding} style={styles.buttonText}>
-              Skip
-            </Text>
+      <GestureDetector gesture={swipes}>
+        <View style={styles.pageContainer}>
+          <View style={styles.stepIndicatorcontainer}>
+            {onboardingSteps.map((steps, index) => (
+              <View
+                key={index}
+                style={[
+                  styles.stepIndicator,
+                  {
+                    backgroundColor: index === screenIndex ? "#CEF202" : "gray",
+                  },
+                ]}
+              />
+            ))}
+          </View>
+          <FontAwesome5
+            style={styles.image}
+            name={data.icon}
+            size={70}
+            color="#CEF202"
+          />
+          <View style={styles.footer}>
+            <Text style={styles.title}>{data.title}</Text>
+            <Text style={styles.description}>{data.description}</Text>
+            <View style={styles.buttonsRow}>
+              <Text onPress={endOnboarding} style={styles.buttonText}>
+                Skip
+              </Text>
 
-            <Pressable onPress={onContinue} style={styles.button}>
-              <Text style={styles.buttonText}>Continue</Text>
-            </Pressable>
+              <Pressable onPress={onContinue} style={styles.button}>
+                <Text style={styles.buttonText}>Continue</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
-      </View>
-
       </GestureDetector>
-     
     </SafeAreaView>
   );
 }
