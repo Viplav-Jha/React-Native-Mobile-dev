@@ -5,6 +5,16 @@ import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import { Directions } from "react-native-gesture-handler";
+import Animated, {
+  FadeIn,
+  FadeOut,
+  BounceInRight,
+  BounceInLeft,
+  SlideInRight,
+  SlideOutLeft,
+  SlideInLeft,
+  SlideOutRight,
+} from "react-native-reanimated";
 
 const onboardingSteps = [
   {
@@ -75,7 +85,7 @@ export default function OnboardingScreen() {
       <Stack.Screen options={{ headerShown: false }} />
       <StatusBar style="light" />
       <GestureDetector gesture={swipes}>
-        <View style={styles.pageContainer}>
+        <View style={styles.pageContainer} key={screenIndex}>
           <View style={styles.stepIndicatorcontainer}>
             {onboardingSteps.map((steps, index) => (
               <View
@@ -89,15 +99,29 @@ export default function OnboardingScreen() {
               />
             ))}
           </View>
-          <FontAwesome5
-            style={styles.image}
-            name={data.icon}
-            size={70}
-            color="#CEF202"
-          />
+          <Animated.View entering={SlideInLeft}>
+            <FontAwesome5
+              style={styles.image}
+              name={data.icon}
+              size={100}
+              color="#CEF202"
+            />
+          </Animated.View>
+
           <View style={styles.footer}>
-            <Text style={styles.title}>{data.title}</Text>
-            <Text style={styles.description}>{data.description}</Text>
+            <Animated.Text
+              entering={SlideInRight.delay(50)}
+              exiting={SlideOutLeft}
+              style={styles.title}
+            >
+              {data.title}
+            </Animated.Text>
+            <Animated.Text
+              entering={SlideInRight.delay(200)}
+              style={styles.description}
+            >
+              {data.description}
+            </Animated.Text>
             <View style={styles.buttonsRow}>
               <Text onPress={endOnboarding} style={styles.buttonText}>
                 Skip
@@ -127,7 +151,7 @@ const styles = StyleSheet.create({
   },
   image: {
     alignSelf: "center",
-    marginTop: 50,
+    marginTop: 80,
   },
   title: {
     color: "#FDFDFD",
