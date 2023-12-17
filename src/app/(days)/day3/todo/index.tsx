@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
 import React, { useState } from "react";
 import { Stack } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -26,6 +26,15 @@ const dummyTasks = [
 
 const TodoScreen = () => {
   const [tasks, setTask] = useState(dummyTasks);
+  
+  const onItemPressed = (index:number) =>{
+     setTask((currentTask)=>{
+        const updatedTasks = [...currentTask]
+        updatedTasks[index].isFinished = !updatedTasks[index].isFinished;
+        console.log(updatedTasks)
+        return updatedTasks;
+     })
+  }
 
   return (
     <View style={styles.page}>
@@ -33,8 +42,8 @@ const TodoScreen = () => {
       <FlatList
         contentContainerStyle={{ gap: 10 }}
         data={tasks}
-        renderItem={({ item }) => (
-          <View style={styles.taskContainer}>
+        renderItem={({ item ,index}) => (
+          <Pressable onPress={()=>onItemPressed(index)} style={styles.taskContainer}>
             <MaterialCommunityIcons
               name={
                 item.isFinished
@@ -54,7 +63,7 @@ const TodoScreen = () => {
             >
               {item.title}
             </Text>
-          </View>
+          </Pressable>
         )}
       />
     </View>
