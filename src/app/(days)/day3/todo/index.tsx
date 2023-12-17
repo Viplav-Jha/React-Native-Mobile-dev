@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import React, { useState } from "react";
 import { Stack } from "expo-router";
 
@@ -24,12 +24,19 @@ const dummyTasks = [
 ];
 
 const TodoScreen = () => {
-  const [tasks, setTask] = useState([]);
+  const [tasks, setTask] = useState(dummyTasks);
 
   return (
     <View style={styles.page}>
       <Stack.Screen options={{ title: "TODO" }} />
-      <Text>TODO SCREEN </Text>
+      <FlatList
+        data={tasks}
+        renderItem={({ item }) => (
+          <View>
+            <Text>{item.title}</Text>
+          </View>
+        )}
+      />
     </View>
   );
 };
