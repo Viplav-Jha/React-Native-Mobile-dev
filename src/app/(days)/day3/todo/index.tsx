@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import React, { useState } from "react";
 import { Stack } from "expo-router";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const dummyTasks = [
   {
@@ -30,10 +31,16 @@ const TodoScreen = () => {
     <View style={styles.page}>
       <Stack.Screen options={{ title: "TODO" }} />
       <FlatList
+        contentContainerStyle={{ gap: 10 }}
         data={tasks}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.title}</Text>
+          <View style={styles.taskContainer}>
+            <MaterialCommunityIcons
+              name="checkbox-marked-circle-outline"
+              size={24}
+              color="dimgray"
+            />
+            <Text style={styles.tasktitle}>{item.title}</Text>
           </View>
         )}
       />
@@ -42,7 +49,21 @@ const TodoScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  page: {},
+  page: {
+    padding: 15,
+    backgroundColor: "white",
+    flex: 1,
+  },
+  taskContainer: {
+    padding: 5,
+    // borderWidth:1,
+    // borderColor:'gray',
+  },
+  tasktitle: {
+    fontFamily: "InterSemi",
+    fontSize: 15,
+    color: "dimgray",
+  },
 });
 
 export default TodoScreen;
