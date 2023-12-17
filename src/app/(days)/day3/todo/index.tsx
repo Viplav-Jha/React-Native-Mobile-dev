@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 const dummyTasks = [
   {
     title: "Setup Day3 structure",
-    isFinished: false,
+    isFinished: true,
   },
   {
     title: "Add a new task",
@@ -36,11 +36,24 @@ const TodoScreen = () => {
         renderItem={({ item }) => (
           <View style={styles.taskContainer}>
             <MaterialCommunityIcons
-              name="checkbox-marked-circle-outline"
+              name={
+                item.isFinished
+                  ? "checkbox-marked-circle-outline"
+                  : "checkbox-blank-circle-outline"
+              }
               size={24}
               color="dimgray"
             />
-            <Text style={styles.tasktitle}>{item.title}</Text>
+            <Text
+              style={[
+                styles.tasktitle,
+                {
+                  textDecorationLine: item.isFinished ? "line-through" : "none",
+                },
+              ]}
+            >
+              {item.title}
+            </Text>
           </View>
         )}
       />
@@ -58,6 +71,9 @@ const styles = StyleSheet.create({
     padding: 5,
     // borderWidth:1,
     // borderColor:'gray',
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
   },
   tasktitle: {
     fontFamily: "InterSemi",
