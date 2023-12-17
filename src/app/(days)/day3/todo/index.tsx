@@ -4,18 +4,21 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
-  TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { Stack } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import NewTaskInput from "../../../components/core/day3/NewTaskInput";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-interface taskProps {
+export type Task = {
   title: string;
   isFinished: boolean;
-}
+};
 
-const dummyTasks = [
+const dummyTasks: Task[] = [
   {
     title: "Setup Day3 structure",
     isFinished: true,
@@ -37,7 +40,7 @@ const dummyTasks = [
 ];
 
 const TodoScreen = () => {
-  const [tasks, setTask] = useState(dummyTasks);
+  const [tasks, setTask] = useState<Task[]>(dummyTasks);
   const [newTask, setNewTask] = useState("");
 
   const onItemPressed = (index: number) => {
@@ -50,68 +53,59 @@ const TodoScreen = () => {
   };
 
   return (
-    <View style={styles.page}>
+    <KeyboardAvoidingView
+      style={styles.page}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={100}
+    >
       <Stack.Screen options={{ title: "TODO" }} />
-      <FlatList
-        contentContainerStyle={{ gap: 10 }}
-        data={tasks}
-        renderItem={({ item, index }) => (
-          <Pressable
-            onPress={() => onItemPressed(index)}
-            style={styles.taskContainer}
-          >
-            <MaterialCommunityIcons
-              name={
-                item.isFinished
-                  ? "checkbox-marked-circle-outline"
-                  : "checkbox-blank-circle-outline"
-              }
-              size={24}
-              color="dimgray"
-            />
-            <Text
-              style={[
-                styles.tasktitle,
-                {
-                  textDecorationLine: item.isFinished ? "line-through" : "none",
-                },
-              ]}
+      <SafeAreaView>
+        <FlatList
+          contentContainerStyle={{ gap: 5,padding:10 }}
+          data={tasks}
+          renderItem={({ item, index }) => (
+            <Pressable
+              onPress={() => onItemPressed(index)}
+              style={styles.taskContainer}
             >
-              {item.title}
-            </Text>
-          </Pressable>
-        )}
-        ListFooterComponent={() => (
-          <View style={styles.taskContainer}>
-            <MaterialCommunityIcons
-              name={"checkbox-blank-circle-outline"}
-              size={24}
-              color="dimgray"
+              <MaterialCommunityIcons
+                name={
+                  item.isFinished
+                    ? "checkbox-marked-circle-outline"
+                    : "checkbox-blank-circle-outline"
+                }
+                size={24}
+                color="dimgray"
+              />
+              <Text
+                style={[
+                  styles.tasktitle,
+                  {
+                    textDecorationLine: item.isFinished
+                      ? "line-through"
+                      : "none",
+                  },
+                ]}
+              >
+                {item.title}
+              </Text>
+            </Pressable>
+          )}
+          ListFooterComponent={() => (
+            <NewTaskInput
+              onAdd={(newTodo: Task) =>
+                setTask((currentTasks) => [...currentTasks, newTodo])
+              }
             />
-            <TextInput
-              autoFocus
-              value={newTask}
-              onChangeText={setNewTask}
-              style={styles.input}
-              placeholder="TODO...."
-              onEndEditing={() => {
-                setTask((currentTasks) => [
-                  ...currentTasks,
-                  { title: newTask, isFinished: false },
-                ]);
-                setNewTask("");
-              }}
-            />
-          </View>
-        )}
-      />
-    </View>
+          )}
+        />
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   page: {
-    padding: 15,
     backgroundColor: "white",
     flex: 1,
   },
