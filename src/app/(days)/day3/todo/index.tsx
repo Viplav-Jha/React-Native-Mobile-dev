@@ -1,7 +1,19 @@
-import { View, Text, StyleSheet, FlatList, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  TextInput,
+} from "react-native";
 import React, { useState } from "react";
 import { Stack } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+interface taskProps {
+  title: string;
+  isFinished: boolean;
+}
 
 const dummyTasks = [
   {
@@ -26,15 +38,16 @@ const dummyTasks = [
 
 const TodoScreen = () => {
   const [tasks, setTask] = useState(dummyTasks);
-  
-  const onItemPressed = (index:number) =>{
-     setTask((currentTask)=>{
-        const updatedTasks = [...currentTask]
-        updatedTasks[index].isFinished = !updatedTasks[index].isFinished;
-        console.log(updatedTasks)
-        return updatedTasks;
-     })
-  }
+  const [newTask, setNewTask] = useState("");
+
+  const onItemPressed = (index: number) => {
+    setTask((currentTask) => {
+      const updatedTasks = [...currentTask];
+      updatedTasks[index].isFinished = !updatedTasks[index].isFinished;
+      console.log(updatedTasks);
+      return updatedTasks;
+    });
+  };
 
   return (
     <View style={styles.page}>
@@ -42,8 +55,11 @@ const TodoScreen = () => {
       <FlatList
         contentContainerStyle={{ gap: 10 }}
         data={tasks}
-        renderItem={({ item ,index}) => (
-          <Pressable onPress={()=>onItemPressed(index)} style={styles.taskContainer}>
+        renderItem={({ item, index }) => (
+          <Pressable
+            onPress={() => onItemPressed(index)}
+            style={styles.taskContainer}
+          >
             <MaterialCommunityIcons
               name={
                 item.isFinished
@@ -65,6 +81,29 @@ const TodoScreen = () => {
             </Text>
           </Pressable>
         )}
+        ListFooterComponent={() => (
+          <View style={styles.taskContainer}>
+            <MaterialCommunityIcons
+              name={"checkbox-blank-circle-outline"}
+              size={24}
+              color="dimgray"
+            />
+            <TextInput
+              autoFocus
+              value={newTask}
+              onChangeText={setNewTask}
+              style={styles.input}
+              placeholder="TODO...."
+              onEndEditing={() => {
+                setTask((currentTasks) => [
+                  ...currentTasks,
+                  { title: newTask, isFinished: false },
+                ]);
+                setNewTask("");
+              }}
+            />
+          </View>
+        )}
       />
     </View>
   );
@@ -78,8 +117,6 @@ const styles = StyleSheet.create({
   },
   taskContainer: {
     padding: 5,
-    // borderWidth:1,
-    // borderColor:'gray',
     flexDirection: "row",
     gap: 10,
     alignItems: "center",
@@ -88,6 +125,13 @@ const styles = StyleSheet.create({
     fontFamily: "InterSemi",
     fontSize: 15,
     color: "dimgray",
+    flex: 1,
+  },
+  input: {
+    fontFamily: "InterSemi",
+    color: "dimgray",
+    fontSize: 15,
+    flex: 1,
   },
 });
 
