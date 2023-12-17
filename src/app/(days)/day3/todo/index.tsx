@@ -9,10 +9,9 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Stack } from "expo-router";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import NewTaskInput from "../../../components/core/day3/NewTaskInput";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import TaskListItem from "../TaskListItem";
 export type Task = {
   title: string;
   isFinished: boolean;
@@ -41,7 +40,6 @@ const dummyTasks: Task[] = [
 
 const TodoScreen = () => {
   const [tasks, setTask] = useState<Task[]>(dummyTasks);
-  const [newTask, setNewTask] = useState("");
 
   const onItemPressed = (index: number) => {
     setTask((currentTask) => {
@@ -52,6 +50,18 @@ const TodoScreen = () => {
     });
   };
 
+  const deleteTask=(index:number)=>{
+    setTask((currentTask)=>{
+      const updatedTask =[...currentTask]
+      updatedTask.splice(index,1);
+      return updatedTask;
+
+    })
+  }
+
+
+
+
   return (
     <KeyboardAvoidingView
       style={styles.page}
@@ -61,35 +71,15 @@ const TodoScreen = () => {
       <Stack.Screen options={{ title: "TODO" }} />
       <SafeAreaView>
         <FlatList
-          contentContainerStyle={{ gap: 5,padding:10 }}
+          keyExtractor={(item)=>item.title}
+          contentContainerStyle={{ gap: 5, padding: 10 }}
           data={tasks}
           renderItem={({ item, index }) => (
-            <Pressable
-              onPress={() => onItemPressed(index)}
-              style={styles.taskContainer}
-            >
-              <MaterialCommunityIcons
-                name={
-                  item.isFinished
-                    ? "checkbox-marked-circle-outline"
-                    : "checkbox-blank-circle-outline"
-                }
-                size={24}
-                color="dimgray"
-              />
-              <Text
-                style={[
-                  styles.tasktitle,
-                  {
-                    textDecorationLine: item.isFinished
-                      ? "line-through"
-                      : "none",
-                  },
-                ]}
-              >
-                {item.title}
-              </Text>
-            </Pressable>
+            <TaskListItem
+             onDelete={()=>deleteTask(index)}
+              task={item}
+              onItemPressed={() => onItemPressed(index)}
+            />
           )}
           ListFooterComponent={() => (
             <NewTaskInput
