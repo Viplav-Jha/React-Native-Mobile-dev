@@ -6,6 +6,7 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  Button,
 } from "react-native";
 import React, { useState } from "react";
 import { Stack } from "expo-router";
@@ -16,6 +17,8 @@ export type Task = {
   title: string;
   isFinished: boolean;
 };
+
+import { useHeaderHeight } from "@react-navigation/elements";
 
 const dummyTasks: Task[] = [
   {
@@ -40,6 +43,28 @@ const dummyTasks: Task[] = [
 
 const TodoScreen = () => {
   const [tasks, setTask] = useState<Task[]>(dummyTasks);
+  const [serachQuery, setSearchQuery] = useState("");
+  const [tab,setTab] =useState<'All' |'Todo' | 'Finished'>('All');
+  const headerHeight = useHeaderHeight();
+
+  const filteredTask = tasks.filter((task) => {
+    
+    if(task.isFinished && tab === 'Todo'){
+      return false
+    }
+    if(!task.isFinished && tab=== 'Finished'){
+      return false;
+    }
+
+    if (!serachQuery) {
+      return true;
+    }
+
+    return task.title
+      .toLocaleLowerCase()
+      .trim()
+      .includes(serachQuery.toLocaleLowerCase().trim());
+  });
 
   const onItemPressed = (index: number) => {
     setTask((currentTask) => {
@@ -50,17 +75,13 @@ const TodoScreen = () => {
     });
   };
 
-  const deleteTask=(index:number)=>{
-    setTask((currentTask)=>{
-      const updatedTask =[...currentTask]
-      updatedTask.splice(index,1);
+  const deleteTask = (index: number) => {
+    setTask((currentTask) => {
+      const updatedTask = [...currentTask];
+      updatedTask.splice(index, 1);
       return updatedTask;
-
-    })
-  }
-
-
-
+    });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -68,15 +89,34 @@ const TodoScreen = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={100}
     >
-      <Stack.Screen options={{ title: "TODO" }} />
-      <SafeAreaView>
+      <Stack.Screen
+        options={{
+          title: "TODO",
+          headerBackVisible: false,
+          headerSearchBarOptions: {
+            hideWhenScrolling: true,
+            onChangeText: (e) => setSearchQuery(e.nativeEvent.text),
+          },
+        }}
+      />
+      <SafeAreaView
+        edges={["bottom"]}
+        style={{ flex: 1, paddingTop: headerHeight + 35 }}
+      >
+        <Text>{serachQuery}</Text>
+        <View style={{flexDirection:'row', marginTop:10,justifyContent:'space-around'}}>
+           <Button title="All" onPress={()=>setTab('All')} />
+           <Button title="Todo" onPress={()=>setTab('Todo')} />
+           <Button title="Finished" onPress={()=>setTab('Finished')} />
+        </View>
+
         <FlatList
-          keyExtractor={(item)=>item.title}
-          contentContainerStyle={{ gap: 5, padding: 10 }}
-          data={tasks}
+          keyExtractor={(item) => item.title}
+          contentContainerStyle={{ gap: 5, padding: 10, marginTop: 10 }}
+          data={filteredTask}
           renderItem={({ item, index }) => (
             <TaskListItem
-             onDelete={()=>deleteTask(index)}
+              onDelete={() => deleteTask(index)}
               task={item}
               onItemPressed={() => onItemPressed(index)}
             />
