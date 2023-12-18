@@ -1,64 +1,113 @@
 import { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator,StyleSheet } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import * as Location from "expo-location";
+import { Stack } from "expo-router";
 
-const url = `https://api.openweathermap.org/data/2.5/weather?lat=26.1542&lon=85.8918&appid=6beb908e4186fa331dd1e1f2e1b5c2a1&units=metric`;
+const BASE_URL = `https://api.openweathermap.org/data/2.5/`;
+const OPEN_WEATHER_KEY = process.env.EXPO_PUBLIC_OPEN_WEATHER_KEY;
 
- type Weather ={
-    name:string;
-    "main": {
-        "temp": number,
-        "feels_like": number,
-        "temp_min": number,
-        "temp_max": number,
-        "pressure": number,
-        "humidity": number,
-        "sea_level": number,
-        "grnd_level": number
-      },
- };
+// api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
+
+type MainWeather = {
+  temp: number;
+  feels_like: number;
+  temp_min: number;
+  temp_max: number;
+  pressure: number;
+  humidity: number;
+  sea_level: number;
+  grnd_level: number;
+};
+
+type Weather = {
+  name: string;
+  main: MainWeather;
+};
+
+type WeatherForecast = {
+  main: MainWeather;
+  dt: number;
+};
 
 const weatherScreen = () => {
+  const [location, setLocation] = useState<Location.LocationObject>();
+  const [errorMsg, setErrorMsg] = useState("");
   const [weather, setWeather] = useState<Weather>();
+  const [forecast, setForecaste] = useState<Weather>();
+
+  useEffect(() => {
+    if (location) {
+      fetchWeather();
+      fetchForecast();
+    }
+  }, [location]);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+    })();
+  }, []);
 
   const fetchWeather = async () => {
-    console.log("fetch data");
-    const result = await fetch(url);
+    if (!location) {
+      return;
+    }
+
+    const result = await fetch(
+      `${BASE_URL}/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=${OPEN_WEATHER_KEY}&units=metric`
+    );
     const data = await result.json();
     setWeather(data);
   };
 
-  useEffect(() => {
-    fetchWeather();
-  }, []);
+  const fetchForecast = async () => {
+    if (!location) {
+      return;
+    }
+    const numberOfDays = 5;
+    const result = await fetch(
+      `${BASE_URL}/forecast?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=${OPEN_WEATHER_KEY}&units=metric`
+    );
+    const data = await result.json();
+    console.log(JSON.stringify(data, null, 2));
+    setForecaste(data.list);
+  };
 
   if (!weather) {
-      return <ActivityIndicator/>;
+    return <ActivityIndicator />;
   }
   return (
     <View style={styles.container}>
+      <Stack.Screen options={{ title: "WeatherApp" }} />
       <Text style={styles.location}>{weather.name}</Text>
       <Text style={styles.temp}>{Math.round(weather.main.temp)}°</Text>
     </View>
   );
 };
 
-const styles =StyleSheet.create({
-    container:{
-        flex:1,
-        backgroundColor:'white',
-        justifyContent:'center',
-        alignItems:'center'
-    },
-    location:{
-       fontFamily:'Inter',
-       fontSize:30,
-
-    },
-    temp:{
-        fontFamily:'InterBlack',
-        fontSize:50,
-        color:'gray'
-    }
-})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  location: {
+    fontFamily: "Inter",
+    fontSize: 30,
+  },
+  temp: {
+    fontFamily: "InterBlack",
+    fontSize: 50,
+    color: "gray",
+  },
+});
 
 export default weatherScreen;
