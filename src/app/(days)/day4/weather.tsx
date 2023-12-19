@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  FlatList,
+} from "react-native";
 import * as Location from "expo-location";
 import { Stack } from "expo-router";
+import ForcasteItem from "../../components/core/day4/ForcasteItem";
 
 const BASE_URL = `https://api.openweathermap.org/data/2.5/`;
 const OPEN_WEATHER_KEY = process.env.EXPO_PUBLIC_OPEN_WEATHER_KEY;
@@ -24,7 +31,7 @@ type Weather = {
   main: MainWeather;
 };
 
-type WeatherForecast = {
+export type WeatherForecast = {
   main: MainWeather;
   dt: number;
 };
@@ -33,7 +40,7 @@ const weatherScreen = () => {
   const [location, setLocation] = useState<Location.LocationObject>();
   const [errorMsg, setErrorMsg] = useState("");
   const [weather, setWeather] = useState<Weather>();
-  const [forecast, setForecaste] = useState<Weather>();
+  const [forecast, setForecaste] = useState<WeatherForecast[]>();
 
   useEffect(() => {
     if (location) {
@@ -71,7 +78,6 @@ const weatherScreen = () => {
     if (!location) {
       return;
     }
-    const numberOfDays = 5;
     const result = await fetch(
       `${BASE_URL}/forecast?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=${OPEN_WEATHER_KEY}&units=metric`
     );
@@ -88,6 +94,13 @@ const weatherScreen = () => {
       <Stack.Screen options={{ title: "WeatherApp" }} />
       <Text style={styles.location}>{weather.name}</Text>
       <Text style={styles.temp}>{Math.round(weather.main.temp)}°</Text>
+
+      <FlatList
+        data={forecast}
+        horizontal
+        contentContainerStyle={{gap:10,height:150,backgroundColor:'blue'}}
+        renderItem={({ item }) =><ForcasteItem forcaste={item}/>}
+      />
     </View>
   );
 };
@@ -105,7 +118,7 @@ const styles = StyleSheet.create({
   },
   temp: {
     fontFamily: "InterBlack",
-    fontSize: 50,
+    fontSize: 100,
     color: "gray",
   },
 });
