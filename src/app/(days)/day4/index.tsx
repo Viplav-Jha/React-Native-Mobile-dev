@@ -3,20 +3,20 @@ import React from "react";
 import { Link, Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const DayDeatilsScreen2 = () => {
+const DayDeatilsScreen = () => {
  
   const desctiption =`
-  # Todo app
-  Ultimate Todo app ;
+  # Wether app
+  Fetch weather data and display it ;
   `
 
   return (
     <SafeAreaView edges={['bottom']} style={{flex:1}}>
-        <Stack.Screen options={{title:'Day 3:Todo'}} />
-        <Link href='/day4/todo' asChild>
-            <Button title=" Go to TODO"></Button>
+        <Stack.Screen options={{title:'Day 3:Weather App'}} />
+        <Link href='/day4/weather' asChild>
+            <Button title=" Check Weather Status"></Button>
         </Link>
     </SafeAreaView>
   );
 };
-export default DayDeatilsScreen2;
+export default DayDeatilsScreen;
