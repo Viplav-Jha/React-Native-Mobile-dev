@@ -13,7 +13,7 @@ const DayDeatilsScreen2 = () => {
   return (
     <SafeAreaView edges={['bottom']} style={{flex:1}}>
         <Stack.Screen options={{title:'Day 3:Todo'}} />
-        <Link href='/day4/todo' asChild>
+        <Link href='/day3/todo' asChild>
             <Button title=" Go to TODO"></Button>
         </Link>
     </SafeAreaView>
