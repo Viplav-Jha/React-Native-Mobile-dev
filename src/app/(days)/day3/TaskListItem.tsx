@@ -1,32 +1,33 @@
-import { View, Text, StyleSheet, Pressable,Animated} from "react-native";
+import { View, Text, StyleSheet, Pressable, Animated } from "react-native";
 import React from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Task } from "@/app/(days)/day3/todo";
 import Swipeable from "react-native-gesture-handler/Swipeable";
-import Reanimated, { JumpingTransition,CurvedTransition } from "react-native-reanimated";
+import Reanimated, {
+  JumpingTransition,
+  CurvedTransition,
+} from "react-native-reanimated";
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
-
 const RightActions = ({
- dragAnimatedValue,
- onDelete
+  dragAnimatedValue,
+  onDelete,
 }: {
-    dragAnimatedValue:  Animated.AnimatedInterpolation<string | number>;
-     onDelete:()=>void
+  dragAnimatedValue: Animated.AnimatedInterpolation<string | number>;
+  onDelete: () => void;
 }) => {
-  const animatedStyle = ({
+  const animatedStyle = {
     transform: [
       {
         translateX: dragAnimatedValue.interpolate({
-            inputRange: [-40,0],
-            outputRange: [0,40],
-            extrapolate: 'clamp',
-          })
-        }
-      
+          inputRange: [-40, 0],
+          outputRange: [0, 40],
+          extrapolate: "clamp",
+        }),
+      },
     ],
-  });
+  };
 
   return (
     <AnimatedView
@@ -41,55 +42,56 @@ const RightActions = ({
       ]}
     >
       <MaterialCommunityIcons
-      onPress={onDelete}
-      name="delete" size={24} color="white" />
+        onPress={onDelete}
+        name="delete"
+        size={24}
+        color="white"
+      />
     </AnimatedView>
   );
 };
 
 type TaskListItem = {
-    task: Task;
-    onItemPressed: () => void;
-    onDelete:()=>void
-  };
-  
+  task: Task;
+  onItemPressed: () => void;
+  onDelete: () => void;
+};
 
-const TaskListItem = ({ task, onItemPressed,onDelete }: TaskListItem) => {
+const TaskListItem = ({ task, onItemPressed, onDelete }: TaskListItem) => {
   return (
-    <Reanimated.View  layout={CurvedTransition}>
-        <Swipeable
-      renderRightActions={(progressAnimatedValue, dragAnimatedValue) => (
-        <RightActions
-          onDelete={onDelete}
-          dragAnimatedValue={dragAnimatedValue}
-        />
-      )}
-    >
-      <Pressable onPress={onItemPressed} style={styles.taskContainer}>
-        <MaterialCommunityIcons
-          name={
-            task.isFinished
-              ? "checkbox-marked-circle-outline"
-              : "checkbox-blank-circle-outline"
-          }
-          size={24}
-          color={task.isFinished ? "gray" : "dimgray"}
-        />
-        <Text
-          style={[
-            styles.tasktitle,
-            {
-              textDecorationLine: task.isFinished ? "line-through" : "none",
-              color: task.isFinished ? "lightgray" : "dimgray",
-            },
-          ]}
-        >
-          {task.title}
-        </Text>
-      </Pressable>
-    </Swipeable> 
+    <Reanimated.View layout={CurvedTransition}>
+      <Swipeable
+        renderRightActions={(progressAnimatedValue, dragAnimatedValue) => (
+          <RightActions
+            onDelete={onDelete}
+            dragAnimatedValue={dragAnimatedValue}
+          />
+        )}
+      >
+        <Pressable onPress={onItemPressed} style={styles.taskContainer}>
+          <MaterialCommunityIcons
+            name={
+              task.isFinished
+                ? "checkbox-marked-circle-outline"
+                : "checkbox-blank-circle-outline"
+            }
+            size={24}
+            color={task.isFinished ? "gray" : "dimgray"}
+          />
+          <Text
+            style={[
+              styles.tasktitle,
+              {
+                textDecorationLine: task.isFinished ? "line-through" : "none",
+                color: task.isFinished ? "lightgray" : "dimgray",
+              },
+            ]}
+          >
+            {task.title}
+          </Text>
+        </Pressable>
+      </Swipeable>
     </Reanimated.View>
-   
   );
 };
 const styles = StyleSheet.create({

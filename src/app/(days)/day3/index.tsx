@@ -7,8 +7,7 @@ const DayDeatilsScreen2 = () => {
  
   const desctiption =`
   # Todo app
-  Ultimate Todo app ;
-  `
+  Ultimate Todo app ; `
 
   return (
     <SafeAreaView edges={['bottom']} style={{flex:1}}>
