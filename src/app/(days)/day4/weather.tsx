@@ -91,21 +91,28 @@ const weatherScreen = () => {
   }
   return (
     <View style={styles.container}>
-     
       <Stack.Screen options={{ title: "WeatherApp" }} />
-      <View style={{flex:1}}>
-      <Text style={styles.location}>{weather.name}</Text>
-      <Text style={styles.temp}>{Math.round(weather.main.temp)}°</Text>
+      <View style={{ flex: 1 }}>
+        <Text style={styles.location}>{weather.name}</Text>
+        <Text style={styles.temp}>{Math.round(weather.main.temp)}°</Text>
       </View>
-     
 
       <FlatList
         data={forecast}
         horizontal
         showsHorizontalScrollIndicator={false}
-        style={{backgroundColor:'red',flexGrow:0,height:200,marginBottom:40}}
-        contentContainerStyle={{gap:10,height:150,backgroundColor:'blue'}}
-        renderItem={({ item }) =><ForcasteItem forcaste={item}/>}
+        style={{
+          backgroundColor: "red",
+          flexGrow: 0,
+          height: 200,
+          marginBottom: 40,
+        }}
+        contentContainerStyle={{
+          gap: 10,
+          height: 150,
+          backgroundColor: "blue",
+        }}
+        renderItem={({ item }) => <ForcasteItem forcaste={item} />}
       />
     </View>
   );
