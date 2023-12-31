@@ -15,14 +15,14 @@ const ProtectedScreen = () => {
         }}
       >
         <Text style={{ fontFamily: "Inter", fontSize: 20, marginBottom: 20 }}>
-          Protected Info
+          More Protected Info
         </Text>
         <FontAwesome5
           name="lock"
           size={75}
           color="gray"
         />
-        <Link href={"/day5/protected/second"} >Next page</Link>
+     <Link href={"/day5/protected/index"} >Prev page</Link>
       </View>
     
   );

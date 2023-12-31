@@ -13,6 +13,7 @@ import {
   AmaticSC_700Bold,
 } from "@expo-google-fonts/amatic-sc";
 import * as SplashScreen from "expo-splash-screen";
+import BiometricsProvider from "./components/day5/BiometricsProvider";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,14 +37,17 @@ export default function RootLayout() {
     return null;
   }
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <BiometricsProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack
         screenOptions={{
-          title: "DEVember",
+          title: "ReactNative",
         }}
       >
-        <Stack.Screen name="index" options={{ title: "DEVember" }} />
+        <Stack.Screen name="index" options={{ title: "ReactNative" }} />
       </Stack>
     </GestureHandlerRootView>
+    </BiometricsProvider>
+    
   );
 }
