@@ -18,6 +18,7 @@ const DayDetailsScreen = () => {
       <Link href="/day5/protected" asChild>
         <Button title="Go to Protected App" />
       </Link>
+      
     </SafeAreaView>
   );
 };
