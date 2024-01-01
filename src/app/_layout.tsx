@@ -39,15 +39,14 @@ export default function RootLayout() {
   return (
     <BiometricsProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
-      <Stack
-        screenOptions={{
-          title: "ReactNative",
-        }}
-      >
-        <Stack.Screen name="index" options={{ title: "ReactNative" }} />
-      </Stack>
-    </GestureHandlerRootView>
+        <Stack
+          screenOptions={{
+            title: "ReactNative",
+          }}
+        >
+          <Stack.Screen name="index" options={{ title: "ReactNative" }} />
+        </Stack>
+      </GestureHandlerRootView>
     </BiometricsProvider>
-    
   );
 }
