@@ -1,5 +1,13 @@
-import React, { useRef, useState } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image, Animated, Easing } from 'react-native';
+import React, { useRef, useState } from "react";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Image,
+  Animated,
+  Easing,
+} from "react-native";
 
 interface ScratchCardProps {
   winMessage: string;
@@ -24,7 +32,10 @@ const ScratchCard: React.FC<ScratchCardProps> = ({ winMessage }) => {
       <TouchableOpacity onPress={handleScratch} style={styles.scratchCard}>
         {!isScratched ? (
           <>
-            <Image source={require('./scratch-card.jpg')} style={styles.scratchImage} />
+            <Image
+              source={require("./scratch-card.jpg")}
+              style={styles.scratchImage}
+            />
             <Text style={styles.scratchText}>Scratch here</Text>
           </>
         ) : null}
@@ -33,7 +44,7 @@ const ScratchCard: React.FC<ScratchCardProps> = ({ winMessage }) => {
             styles.resultContainer,
             {
               opacity: scratchOpacity,
-              position: isScratched ? 'absolute' : 'relative',
+              position: isScratched ? "absolute" : "relative",
             },
           ]}
         >
@@ -47,34 +58,34 @@ const ScratchCard: React.FC<ScratchCardProps> = ({ winMessage }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   scratchCard: {
-    position: 'relative',
-    overflow: 'hidden',
+    position: "relative",
+    overflow: "hidden",
   },
   scratchImage: {
     width: 300,
     height: 200,
   },
   scratchText: {
-    position: 'absolute',
+    position: "absolute",
     top: 80,
     left: 120,
     fontSize: 18,
-    fontWeight: 'bold',
-    color: 'black',
+    fontWeight: "bold",
+    color: "black",
   },
   resultContainer: {
     padding: 20,
-    backgroundColor: 'lightgreen',
+    backgroundColor: "lightgreen",
     borderRadius: 10,
   },
   resultText: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: 'green',
+    fontWeight: "bold",
+    color: "green",
   },
 });
 
